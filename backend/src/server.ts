@@ -1,17 +1,38 @@
-import express from "express";
-import cors from "cors";
+import dotenv from "dotenv";
+import { createApp } from "./app";
+import { disconnectDB } from "./db/db"; 
+
+dotenv.config();
+
+export function startServer() {
+  const app = createApp();
+  const PORT = process.env.PORT || 5000;
+
+  const server = app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
 
 
-const app = express();
 
-app.use(cors());
-app.use(express.json());
+  process.on("unhandledRejection", (err) => {
+    console.error("Unhandled Rejection:", err);
+    server.close(async () => {
+      await disconnectDB();
+      process.exit(1);
+    });
+  });
 
-app.get("/health", (_req, res) => {
-  res.json({ status: "ok" });
-});
+  process.on("uncaughtException", async (err) => {
+    console.error("Uncaught Exception:", err);
+    await disconnectDB();
+    process.exit(1);
+  });
 
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+  process.on("SIGTERM", async () => {
+    console.log("SIGTERM received, shutting down gracefully");
+    server.close(async () => {
+      await disconnectDB();
+      process.exit(0);
+    });
+  });
+}
