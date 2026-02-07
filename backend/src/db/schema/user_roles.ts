@@ -8,7 +8,7 @@ export const user_roles = pgTable(
     user_id: uuid("user_id").notNull(),
 
     role: varchar("role", { length: 32 }).notNull(),
-    // tenant | landlord | manager | admin
+    
 
     status: varchar("status", { length: 32 })
       .notNull()
