@@ -45,11 +45,11 @@ export class AuthService {
     });
 
     // 3️⃣ Assign default role
-    const roles = ["member"];
+    const roles = ["tenant"];
 
     await db.insert(user_roles).values({
       user_id: userId,
-      role: "member",
+      role: "tenant",
       status: "active",
     });
 

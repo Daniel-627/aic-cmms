@@ -1,5 +1,4 @@
-export * from "./enums
-";
+export * from "./enums";
 
 export { users } from "./users";
 export { user_roles } from "./user_roles";
@@ -10,6 +9,7 @@ export { auth_sessions } from "./auth_sessions";
 export { journalEntries } from "./journalEntries";
 export { journalLines } from "./journalLines";
 export { accounts } from "./accounts";
+
 
 
 export { payments } from "./payments";
