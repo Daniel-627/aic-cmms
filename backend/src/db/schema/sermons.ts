@@ -6,13 +6,15 @@ import {
   date,
 } from "drizzle-orm/pg-core";
 import { users } from "./users";
+import { sermonStatusEnum } from "./enums";
+
+/* Workflow enum */
+
 
 export const sermons = pgTable("sermons", {
   id: uuid("id").defaultRandom().primaryKey(),
 
   title: text("title").notNull(),
-  preacher: text("preacher").notNull(),
-
   scriptureReference: text("scripture_reference").notNull(),
   summary: text("summary"),
 
@@ -21,18 +23,18 @@ export const sermons = pgTable("sermons", {
 
   sermonDate: date("sermon_date").notNull(),
 
-  status: text("status", {
-    enum: ["DRAFT", "PENDING_APPROVAL", "PUBLISHED"],
-  }).notNull().default("DRAFT"),
+  status: sermonStatusEnum("status")
+    .notNull()
+    .default("DRAFT"),
 
   authorId: uuid("author_id")
     .references(() => users.id)
     .notNull(),
 
-  approvedBy: uuid("approved_by")
+  approvedById: uuid("approved_by_id")
     .references(() => users.id),
 
-  publishedBy: uuid("published_by")
+  publishedById: uuid("published_by_id")
     .references(() => users.id),
 
   createdAt: timestamp("created_at", { withTimezone: true })

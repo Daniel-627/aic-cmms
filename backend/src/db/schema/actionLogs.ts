@@ -2,8 +2,8 @@ import {
   pgTable,
   uuid,
   text,
-  jsonb,
   timestamp,
+  jsonb,
 } from "drizzle-orm/pg-core";
 import { users } from "./users";
 
@@ -14,16 +14,11 @@ export const actionLogs = pgTable("action_logs", {
     .references(() => users.id)
     .notNull(),
 
-  action: text("action").notNull(), 
-  // CREATE / UPDATE / DELETE / APPROVE / PUBLISH
-
-  entity: text("entity").notNull(), 
-  // sermons, payments, journal_entries, etc.
-
+  action: text("action").notNull(), // CREATE_SERMON, APPROVE_SERMON, etc
+  entity: text("entity").notNull(), // SERMON
   entityId: uuid("entity_id").notNull(),
 
-  metadata: jsonb("metadata"), 
-  // before/after, notes, reason
+  metadata: jsonb("metadata"),
 
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()

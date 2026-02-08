@@ -27,3 +27,14 @@ export const paymentStatusEnum = pgEnum(
   "payment_status",
   ["PENDING", "SUCCESS", "FAILED"]
 );
+
+export const sermonStatusEnum = pgEnum("sermon_status", [
+  "DRAFT",
+  "PENDING_APPROVAL",
+  "PUBLISHED",
+]);
+
+export const announcementStatusEnum = pgEnum(
+  "announcement_status",
+  ["DRAFT", "PUBLISHED"]
+);

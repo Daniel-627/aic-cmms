@@ -4,8 +4,12 @@ import {
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
-import { eventTypeEnum } from "./enums";
 import { users } from "./users";
+import { eventTypeEnum } from "./enums";
+import { eventStatusEnum } from "./enums";
+
+/* Workflow enum */
+
 
 export const events = pgTable("events", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -15,20 +19,20 @@ export const events = pgTable("events", {
 
   eventType: eventTypeEnum("event_type").notNull(),
 
-  status: text("status", {
-    enum: ["DRAFT", "PUBLISHED"],
-  }).notNull().default("DRAFT"),
-
   startAt: timestamp("start_at", { withTimezone: true }).notNull(),
   endAt: timestamp("end_at", { withTimezone: true }),
 
   location: text("location"),
 
+  status: eventStatusEnum("status")
+    .notNull()
+    .default("DRAFT"),
+
   createdBy: uuid("created_by")
     .references(() => users.id)
     .notNull(),
 
-  publishedBy: uuid("published_by")
+  publishedById: uuid("published_by_id")
     .references(() => users.id),
 
   createdAt: timestamp("created_at", { withTimezone: true })
