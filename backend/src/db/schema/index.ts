@@ -10,7 +10,7 @@ export { journalEntries } from "./journalEntries";
 export { journalLines } from "./journalLines";
 export { accounts } from "./accounts";
 
-
+export { actionLogs } from "./actionLogs";
 
 export { payments } from "./payments";
 
