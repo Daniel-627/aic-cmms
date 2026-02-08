@@ -31,6 +31,10 @@ export const payments = pgTable("payments", {
   journalEntryId: uuid("journal_entry_id")
     .references(() => journalEntries.id),
 
+  createdBy: uuid("created_by")
+    .references(() => users.id)
+    .notNull(),
+
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),

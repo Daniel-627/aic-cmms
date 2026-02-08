@@ -6,6 +6,7 @@ import {
   timestamp,
 } from "drizzle-orm/pg-core";
 import { accountTypeEnum } from "./enums";
+import { users } from "./users";
 
 export const accounts = pgTable(
   "accounts",
@@ -20,6 +21,10 @@ export const accounts = pgTable(
     parentAccountId: uuid("parent_account_id"),
 
     isActive: boolean("is_active").default(true).notNull(),
+
+    createdBy: uuid("created_by")
+      .references(() => users.id)
+      .notNull(),
 
     createdAt: timestamp("created_at", { withTimezone: true })
       .defaultNow()
