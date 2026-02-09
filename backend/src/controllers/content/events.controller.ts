@@ -12,7 +12,15 @@ export class EventController {
   }
 
   static async publish(req: Request, res: Response) {
-    const event = await EventService.publish(req.params.id, req.user!.id);
+
+    const { id } = req.params;
+
+    if (!id || typeof id !== "string") {
+      return res.status(400).json({ message: "Invalid event id" });
+    }
+
+
+    const event = await EventService.publish(id, req.user!.id);
     res.json(event);
   }
 }

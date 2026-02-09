@@ -23,6 +23,10 @@ export class AnnouncementService {
       })
       .returning();
 
+      if (!announcement) {
+        throw new Error("Failed to create announcement");
+      }
+
     await db.insert(actionLogs).values({
       userId: data.userId,
       action: "CREATE_ANNOUNCEMENT",

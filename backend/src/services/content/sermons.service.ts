@@ -19,6 +19,10 @@ export class SermonService {
       })
       .returning();
 
+    if (!sermon) {
+      throw new Error("Failed to create sermon");
+    }
+
     await db.insert(actionLogs).values({
       userId: data.authorId,
       action: "CREATE_SERMON",
@@ -36,11 +40,15 @@ export class SermonService {
       .where(eq(sermons.id, sermonId))
       .returning();
 
+    if (!sermon) {
+      throw new Error("Sermon not found");
+    }
+
     await db.insert(actionLogs).values({
       userId,
       action: "SUBMIT_SERMON",
       entity: "SERMON",
-      entityId: sermonId,
+      entityId: sermon.id,
     });
 
     return sermon;
@@ -55,11 +63,15 @@ export class SermonService {
       .where(eq(sermons.id, sermonId))
       .returning();
 
+    if (!sermon) {
+      throw new Error("Sermon not found");
+    }
+
     await db.insert(actionLogs).values({
       userId: pastorId,
       action: "APPROVE_SERMON",
       entity: "SERMON",
-      entityId: sermonId,
+      entityId: sermon.id,
     });
 
     return sermon;
@@ -75,11 +87,15 @@ export class SermonService {
       .where(eq(sermons.id, sermonId))
       .returning();
 
+    if (!sermon) {
+      throw new Error("Sermon not found");
+    }
+
     await db.insert(actionLogs).values({
       userId: secretaryId,
       action: "PUBLISH_SERMON",
       entity: "SERMON",
-      entityId: sermonId,
+      entityId: sermon.id,
     });
 
     return sermon;

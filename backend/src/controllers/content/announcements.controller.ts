@@ -12,8 +12,16 @@ export class AnnouncementController {
   }
 
   static async publish(req: Request, res: Response) {
+
+    const { id } = req.params;
+
+    if (!id || typeof id !== "string") {
+      return res.status(400).json({ message: "Invalid sermon id" });
+    }
+
+
     const announcement = await AnnouncementService.publish(
-      req.params.id,
+      id,
       req.user!.id
     );
 

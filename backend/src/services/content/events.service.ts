@@ -27,6 +27,10 @@ export class EventService {
       })
       .returning();
 
+      if (!event) {
+        throw new Error("Failed to create event");
+      }
+
     await db.insert(actionLogs).values({
       userId: data.userId,
       action: "CREATE_EVENT",

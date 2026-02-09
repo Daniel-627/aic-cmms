@@ -12,8 +12,15 @@ export class SermonController {
   }
 
   static async submit(req: Request, res: Response) {
+
+    const { id } = req.params;
+
+    if (!id || typeof id !== "string") {
+      return res.status(400).json({ message: "Invalid sermon id" });
+    }
+
     const sermon = await SermonService.submitForApproval(
-      req.params.id,
+      id,
       req.user!.id
     );
 
@@ -21,8 +28,15 @@ export class SermonController {
   }
 
   static async approve(req: Request, res: Response) {
+
+    const { id } = req.params;
+
+    if (!id || typeof id !== "string") {
+      return res.status(400).json({ message: "Invalid sermon id" });
+    }
+
     const sermon = await SermonService.approve(
-      req.params.id,
+      id,
       req.user!.id
     );
 
@@ -30,8 +44,16 @@ export class SermonController {
   }
 
   static async publish(req: Request, res: Response) {
+
+    const { id } = req.params;
+
+    if (!id || typeof id !== "string") {
+      return res.status(400).json({ message: "Invalid sermon id" });
+    }
+
+
     const sermon = await SermonService.publish(
-      req.params.id,
+      id,
       req.user!.id
     );
 
