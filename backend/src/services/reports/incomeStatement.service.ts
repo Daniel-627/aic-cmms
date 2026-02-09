@@ -3,7 +3,7 @@ import { accounts } from "../../db/schema/accounts";
 import { journalEntries } from "../../db/schema/journalEntries";
 import { journalLines } from "../../db/schema/journalLines";
 import { eq, between, sql } from "drizzle-orm";
-import { IncomeStatementReport } from "../../reports/incomeStatement";
+import { IncomeStatementReport } from "../../types/reports/incomeStatement";
 
 export async function getIncomeStatement(
   from: Date,
