@@ -45,15 +45,20 @@ export class JournalService {
         })
         .returning();
 
+        if (!entry) {
+          throw new Error("Failed to create journal entry");
+        }
+
       // Create journal lines
       await tx.insert(journalLines).values(
-        data.lines.map((line) => ({
-          journalEntryId: entry.id,
-          accountId: line.accountId,
-          debit: line.debit,
-          credit: line.credit,
-        }))
-      );
+  data.lines.map((line) => ({
+    journalEntryId: entry.id,
+    accountId: line.accountId,
+    debit: line.debit !== undefined ? line.debit.toString() : null,
+    credit: line.credit !== undefined ? line.credit.toString() : null,
+  }))
+);
+
 
       // Audit log
       await tx.insert(actionLogs).values({
