@@ -33,7 +33,14 @@ export async function getIncomeStatement(
       journalEntries,
       eq(journalLines.journalEntryId, journalEntries.id)
     )
-    .where(between(journalEntries.entryDate, from, to))
+    .where(
+        between(
+            journalEntries.entryDate,
+            from.toISOString(),
+            to.toISOString()
+        )
+        )
+
     .groupBy(accounts.id, accounts.name, accounts.type);
 
   const income = rows

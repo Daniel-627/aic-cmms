@@ -12,12 +12,19 @@ export async function getRemittanceSummary(
   from: Date,
   to: Date
 ): Promise<RemittanceSummaryReport> {
+  // 🔑 Convert once, use everywhere
+  const fromDate = from.toISOString();
+  const toDate = to.toISOString();
+
   const rows = await db
     .select({
       amount: sql<number>`
-        SUM(
-          COALESCE(${journalLines.credit}, 0)
-          - COALESCE(${journalLines.debit}, 0)
+        COALESCE(
+          SUM(
+            COALESCE(${journalLines.credit}, 0)
+            - COALESCE(${journalLines.debit}, 0)
+          ),
+          0
         )
       `,
     })
@@ -30,8 +37,8 @@ export async function getRemittanceSummary(
     .where(
       and(
         eq(accounts.type, "INCOME"),
-        gte(journalEntries.entryDate, from),
-        lte(journalEntries.entryDate, to)
+        gte(journalEntries.entryDate, fromDate),
+        lte(journalEntries.entryDate, toDate)
       )
     );
 
@@ -42,8 +49,8 @@ export async function getRemittanceSummary(
 
   return {
     period: {
-      from: from.toISOString().split("T")[0],
-      to: to.toISOString().split("T")[0],
+      from: fromDate,
+      to: toDate,
     },
     totalIncome,
     dccRemittance,

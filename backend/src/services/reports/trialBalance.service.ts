@@ -5,8 +5,7 @@ import { TrialBalance } from "../../types/reports/trialBalance";
 export async function getTrialBalance(
   asOf: Date
 ): Promise<TrialBalance> {
-
-  const rows = await db.execute<{
+  const result = await db.execute<{
     account_id: string;
     account_name: string;
     debit: string | null;
@@ -20,20 +19,22 @@ export async function getTrialBalance(
     FROM accounts a
     LEFT JOIN journal_lines jl ON jl.account_id = a.id
     LEFT JOIN journal_entries je ON je.id = jl.journal_entry_id
-      AND je.entry_date <= ${asOf}
+      AND je.entry_date <= ${asOf.toISOString()}
     GROUP BY a.id, a.name
     ORDER BY a.name
   `);
 
-  const lines = rows.map(r => ({
+  // ✅ Use result.rows
+  const lines = result.rows.map((r) => ({
     accountId: r.account_id,
     accountName: r.account_name,
     debit: Number(r.debit),
     credit: Number(r.credit),
   }));
 
+  // ✅ Add explicit types
   const totals = lines.reduce(
-    (acc, l) => {
+    (acc: { debit: number; credit: number }, l: { debit: number; credit: number }) => {
       acc.debit += l.debit;
       acc.credit += l.credit;
       return acc;
